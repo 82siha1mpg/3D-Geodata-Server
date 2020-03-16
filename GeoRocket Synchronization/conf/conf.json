@@ -1,0 +1,13 @@
+{
+   "Assets": "../GeoServer/Assets",
+   "georocket_host" : "http://localhost:63020",
+   "temp_store_gml" : "./temp/",
+   "FME_LOD1" : [{
+				"_3dtile": "../FMETranslator/LOD1/citygml2cesium3dtiles.fmw",
+				"i3s"	: "../FMETranslator/LOD1/citygml2i3s.fmw"
+				}],
+   "FME_LOD2" : [{
+				"_3dtile": "../FMETranslator/LOD2/citygml2cesium3dtiles(LOD2).fmw",
+				"i3s"	: "../FMETranslator/LOD2/citygml_2 _I3S(LOD2)-I3S.fmw"
+				}]
+}

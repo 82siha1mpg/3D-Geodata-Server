@@ -1,0 +1,33 @@
+{
+  "name": "nodejs_3dps",
+  "version": "1.0.0",
+  "description": "The development of 3DPS API on NodeJS",
+  "main": "server.js",
+  "dependencies": {
+    "@turf/projection": "6.0.1",
+    "@turf/turf": "5.1.6",
+    "ajax-request": "^1.2.3",
+    "box-intersect": "^1.0.2",
+    "cesium": "1.60.0",
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "find": "^0.3.0",
+    "fs": "0.0.1-security"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/ThunthepS/2019_04_nodejs_3dps.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/ThunthepS/2019_04_nodejs_3dps/issues"
+  },
+  "homepage": "https://gitlab.com/ThunthepS/2019_04_nodejs_3dps#readme"
+}

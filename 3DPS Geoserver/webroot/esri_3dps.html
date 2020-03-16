@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>Scene Layer 3DPS Call</title>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.13/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.13/"></script>
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+      #infoDiv {
+        background-color: white;
+        padding: 10px;
+        width: 260px;
+        margin: 5px;
+        position: absolute;
+        bottom: 15px;
+        right: 10px;
+        font-size: 14px;
+        display: none;
+      }
+      .geometry-options {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .geometry-button {
+        flex: 1;
+        border-style: solid;
+        border-width: 1px;
+        border-image: none;
+      }
+
+      .geometry-button-selected {
+        background: #4c4c4c;
+        color: #fff;
+      }
+
+      .options {
+        max-width: 260px;
+        width: 100%;
+        height: 25px;
+      }
+    </style>
+    <script>
+      require([
+        "esri/views/SceneView",
+        "esri/layers/GraphicsLayer",
+        "esri/widgets/Sketch",
+        "esri/widgets/Sketch/SketchViewModel",
+        "esri/views/layers/support/FeatureFilter",
+        "esri/geometry/geometryEngine",
+        "esri/Graphic",
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/SceneLayer",
+      ], function(
+        SceneView,
+        GraphicsLayer,
+        Sketch,
+        SketchViewModel,
+        FeatureFilter,
+        geometryEngine,
+        Graphic,
+        Map,
+        MapView,
+        SceneLayer,
+        )
+         {
+        const layer = new GraphicsLayer();
+
+        const map = new Map({
+          basemap: "streets",
+          ground: "world-elevation",
+          layers: [layer]
+        });
+
+        const view = new SceneView({
+          container: "viewDiv",
+          map: map,
+          camera: {
+            position: [7.0160999248770946, 50.66186485998492, 707],
+            tilt: 81,
+            heading: 50
+          }
+        });
+      
+    function loadscene(array_url){
+        console.log("check aray",array_url )
+          sceneLayer = new SceneLayer({      
+          url:array_url[0]["url"],
+          popupEnabled: false
+        }); 
+        map.add(sceneLayer);
+        var symbol = {
+                type: "mesh-3d", // autocasts as new MeshSymbol3D()
+                symbolLayers: [{
+                    type: "fill", // autocasts as new FillSymbol3DLayer()
+                    material: {
+                    color: [142, 192, 206]
+                    },
+                    edges: {
+                    type: "solid", // autocasts as new SolidEdges3D()
+                    color: [10, 10, 10, 0.8]
+                    }
+                }]
+                };
+        // Add the renderer to sceneLayer
+        sceneLayer.renderer = {
+          type: "simple", // autocasts as new SimpleRenderer()
+          symbol: symbol
+        };
+        updateview();
+        }
+         // ** styling of scene layer ends here  ** //
+        // add a GraphicsLayer for the sketches and the buffer
+        let sketchLayer = new GraphicsLayer();
+        view.map.add(sketchLayer);
+
+        const sketch = new Sketch({
+          layer: layer,
+          view: view,
+          availableCreateTools: ["rectangle"]
+        });
+
+        view.ui.add(sketch, "top-right");
+        let sketchGeometry = null;
+        sketch.on(["create"], function(event) {
+          if (event.state == "complete") {
+            sketchGeometry = event.graphic.geometry;
+          }
+        });
+
+    
+   // console.log(lod)
+    //var lod= 1;
+    document.getElementById("Send3DPS").addEventListener("click", function() {
+           // console.log(sketchGeometry);
+           // var bbox = sketchGeometry.toJSON()["rings"];
+            //var wkid = sketchGeometry.toJSON()["spatialReference"]["latestWkid"];
+            var lod = document.getElementById("lodlevel").value;
+            var layername = document.getElementById("textrequest").value;
+            
+            if(layername == "" && sketchGeometry != undefined){
+              var bbox = sketchGeometry.toJSON()["rings"];
+              var wkid = sketchGeometry.toJSON()["spatialReference"]["latestWkid"];
+              call_3DPS_i3s_scene(bbox,wkid,lod,undefined);
+            }
+
+            else if(layername != "" && sketchGeometry == undefined){
+              call_3DPS_i3s_scene(undefined,undefined, lod ,layername);
+            }
+            else{
+              alert("Either Draw bounding box or Specify layer name");
+            }
+
+          });
+    function call_3DPS_i3s_scene(bbox,wkid,lod,layername){
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function(){
+            if(this.readyState ==4 && this.status == 200){
+                  //console.log("response is:",JSON.parse(this.responseText)[0]);
+                  //console.log("-->",JSON.parse(this.responseText))
+                  //console.log("-->",this.responseText)
+                  loadscene(JSON.parse(this.responseText));
+              }
+              }
+              
+         if(layername == undefined){
+         // console.log(`/service/v1?service=3DPS&version=1.0&request=GetScene&mime=i3s&lod=${lod}&boundingbox=${bbox[0]}`);
+          xhttp.open("GET",`/service/v1?service=3DPS&version=1.0&request=GetScene&mime=i3s&lod=${lod}&boundingbox=${bbox[0]}`,true);
+          xhttp.send();
+         }
+         if(layername != undefined){
+          xhttp.open("GET",`/service/v1?service=3DPS&version=1.0&request=GetScene&mime=i3s&lod=${lod}&layer=${layername}`,true);
+          xhttp.send();
+         }
+        }
+    var sceneLayerView = null; 
+    function updateview(){
+      // loop through webmap's operational layers
+      view.map.layers.forEach(function(layer, index) {
+          view
+            .whenLayerView(layer)
+            .then(function(layerView) {
+              if (layer.type === "scene") {
+                sceneLayerView = layerView;
+                updateFilter();
+              }
+            })
+            .catch(console.error);
+        }); 
+        
+    }
+    function updateFilter(){
+            sceneLayerView.filter = new FeatureFilter({
+            geometry: sketchGeometry,
+            spatialRelationship: "contains"
+          });
+         
+    }
+      document.getElementById("infoDiv").style.display = "block";
+      });
+
+    
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv"></div>
+    <div id="infoDiv" class="esri-widget">
+      <b>Send 3DPS Request</b><br/><br/>
+      <select id="lodlevel" onclick="check()">
+        <option value="1">LOD 1</option>
+        <option value="2">LOD 2</option>
+    </select><br/><br/>
+    <b>By Layer</b><input type="text" id="textrequest"> <br/><br/>
+      <button class="esri-button" id="Send3DPS" type="button">
+        Send Request
+      </button>
+    </div>
+  </body>
+</html>

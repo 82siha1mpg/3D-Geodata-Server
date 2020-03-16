@@ -1,0 +1,5 @@
+{
+    "asset_folder_name": "Assets",
+    "port": 8083,
+    "host": "http://localhost"
+}

@@ -1,0 +1,50 @@
+<html>
+    <head>
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.64/Build/Cesium/Cesium.js"></script>
+	<link href="https://cesium.com/downloads/cesiumjs/releases/1.64/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+   
+    <title>3DPS for 3D Tiles </title>
+    <style>
+    
+    html, body, #cesiumContainer {
+        width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+    }
+    #toolbar {
+        background: rgba(91, 200, 233, 0.411);
+        padding: 4px;
+        border-radius: 4px;
+    }
+    #toolbar input {
+        vertical-align: middle;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+   
+      </style>
+    </head>
+<body>
+        <div id='cesiumContainer' class="fullSize"></div>
+        <div id='toolbar' style="position:absolute;top:5%"> 
+    </br>
+        <select id="lodlevel">
+            <option value="1">LOD 1</option>
+            <option value="2">LOD 2</option>
+        </select>
+    </br></br>
+        <input type="text" id="textrequest" placeholder="Layer Name" > 
+    </br></br>
+        <button type="button" onclick="drawBounding();">
+            Draw Bounding Box
+        </button>
+    </br></br>
+        <button onclick="call_3DPS()"  value="Send 3DPS">
+            Send 3DPS
+        </button>
+    </br></br>
+    </div>
+        <script src="app.js"></script>
+    
+    </body>
+</html>
