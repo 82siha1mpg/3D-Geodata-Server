@@ -1,4 +1,3 @@
-
 function geo_import(){
     document.getElementById("page-content").innerHTML = 
     '   <h2>IMPORT</h2>\
@@ -78,6 +77,5 @@ function startTranslation(store,layername,lod){
         if(this.readyState == 4 && this.responseText == "Done!" ){
             document.getElementById("page-content").innerHTML = "<h2>All Set! Ready for visualization.</h2>";
         }
-    }
-    
+    }    
 }

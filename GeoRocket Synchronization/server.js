@@ -5,23 +5,17 @@ var bodyParser = require('body-parser');
 const app = express();
 const PORT = process.env.PORT || 8080;
 const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
-
 const prepareModels = require('./Automation JS Tools/onImportAutoTranslate');
 const Addbuild2Models = require('./Automation JS Tools/onAddAutoTranslate3dtiles');
 const _3dtilesDeleteBuildings = require('./Automation JS Tools/onDeleteAutoDelete3dtiles');
 const addBuild = require('../tools-tiles-editor/addBuild_in_b3dm');
-
 const i3sDeleteBuildings = require('./Automation JS Tools/onDeleteAutoDeleteI3S');
-//const i3sAddBuildings = require('./Automation JS Tools/onAddAutoAddi3s')
 const addBuild2Scene = require('../tools-scene-editor/AddtoScene')
-
 const LookUpjson = require('../GeoServer/Create_BBlookupV2')
-
 const conf = JSON.parse(fs.readFileSync("./conf/conf.json"));
 const georocket_host = conf.georocket_host;
 const path_temp_folder = conf.temp_store_gml;
 const destbasePath = conf.Assets;
-
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -31,9 +25,7 @@ app.use(function (req, res, next) {
 
 app.use(express.static(__dirname));
 app.use(bodyParser.text({ type: 'text/html',limit: '100mb' })) // support text encoded bodies
-
 app.use(bodyParser.urlencoded({limit: '100mb', extended: true})); // support encoded bodies
-
 
 const server = require('http').createServer(app);
 	server.listen(PORT, function () {
@@ -86,8 +78,6 @@ app.get("/startTranslation",function(req,res){
         }
       } 
     } 
-  //LookUpjson.createLookup() //it will create or update lookup json in asset folder.
-  
 });
 /**
  * Start Deletion Will simply read Layer name and GML ID.
@@ -98,7 +88,6 @@ app.get("/startDeletion",function(req,res){
   const layername = req.query.layername;
   const lod = req.query.lod;
   const gmlID = req.query.gmlID;
-  //console.log(layername,gmlID);
   processStatus = _3dtilesDeleteBuildings.onDeleteStartUpdate3dtiles(layername, gmlID , lod)
   i3sDeleteBuildings.onDeleteStartUpdatei3s(layername, gmlID , lod)
   res.send("Done")
@@ -108,14 +97,11 @@ app.post("/startAddition",function(req,res){
   const lod = req.query.lod;
   const layername = req.query.layername;
   const forceAdd = req.query.forceadd;
-
   const newgml = req.body;
-  //console.log(lod,layername);  
 
   //Write Temporary GML to translate it.
   const tempGMLPath = path_temp_folder+"temp.gml";
   fs.writeFileSync(tempGMLPath,newgml);
-
   
   if(lod == "1"){
     console.log("Started Updating the models");
@@ -192,7 +178,4 @@ app.post("/startAddition",function(req,res){
           return "Failed"
     });
   }
-
 });
-
-

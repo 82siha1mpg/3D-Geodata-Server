@@ -1,33 +1,20 @@
 const express = require("express");
-//var request = require('request');
-
 const app = express();
 const path = require('path');
-// const request = require("request");
-//const requestajax = require("ajax-request");
 const PORT = process.env.PORT || 8083;
 const fs = require('fs');
 const fsPromises = fs.promises;
-//const boxIntersect = require('box-intersect');
-//const cors = require('cors');
-//var turf = require('turf');
 const turf_contain = require("@turf/turf");
-//const turf_bbox = require('@turf/bbox');
 const turfProject = require("@turf/projection");
 const zlib = require('zlib');
 const traverse = require('./traverse_tile');
-
 
 let config_json = fs.readFileSync('config.json');
 let config = JSON.parse(config_json);    
 let assetFolderName = config['asset_folder_name'];
 var contents = fs.readFileSync(assetFolderName + "/boundingboxLookup.json");
 
-//const intersects = require('rectangles-intersect');
-//const spawn = require("child_process").spawn;
 app.use(function (req, res, next) {
-   // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-   // res.header("Access-Control-Allow-Origin", '*');
           if (path.extname(req.url) === '.0') {
             res.header('Content-Type', 'application/octet-stream');
             res.header('Content-Encoding', 'gzip');
@@ -35,7 +22,6 @@ app.use(function (req, res, next) {
   next();
 });
 app.use(express.static(__dirname));
-//app.use(cors()); //allow cross origin;
 
 const server = require('http').createServer(app);
 	server.listen(PORT, function () {
@@ -45,8 +31,6 @@ const server = require('http').createServer(app);
 
 
 app.get("/service/v1", function (req, res) {
- //   if (typeof req.query.service == "string" && typeof req.query.request == "string" && typeof req.query.version == "string" && typeof req.query.request == "string" && typeof req.query.boundingbox == "string") {
-
   if (typeof req.query.service == "string" && typeof req.query.request == "string" && typeof req.query.version == "string" && typeof req.query.request == "string") {
     // Check Valid Service 
     if (req.query.service == "3DPS" || req.query.service == "3dps") {
@@ -69,9 +53,6 @@ app.get("/service/v1", function (req, res) {
                       for (let i = 0; i < bbLookup.length; i++) {
                         if(req.query.lod == bbLookup[i].lod){
                         var bbox_tile = JSON.parse("[" + bbLookup[i].boundingbox + "]");
-                        //console.log(typeof(bbox_client));
-                        //console.log(bbox_client);
-                        
                         const box_client_turf = turf_contain.bboxPolygon(bbox_client);
                         const box_tile_turf = turf_contain.bboxPolygon(bbox_tile);
 
@@ -95,12 +76,9 @@ app.get("/service/v1", function (req, res) {
                                 var tileset = fs.readFileSync(bbLookup[i].url);
                                 tileset = JSON.parse(tileset);
                                 traverse.newJSON(tileset,bbox_client,temp_JSON_Path);
-                                //console.log(new_tile);
                                 bbLookup[i].url = temp_JSON_Path;
                                 resultArray.push({"url":bbLookup[i].url,"mime": "3dtile"})
-                                
                         }
-                      
                       }  
                         count++;
                         // Checking for the last iteration done, send the result back to the user
@@ -114,8 +92,7 @@ app.get("/service/v1", function (req, res) {
                             res.send("No Tileset in the specified Bounding Box");
                           }
                         }
-                      // if ends
-                      } // for ends
+                      } 
                     } else {
                       res.send({ "error": "Invalid Bounding Box" });
                     }
@@ -126,7 +103,6 @@ app.get("/service/v1", function (req, res) {
                   lodcheck = req.query.lod;
                 }
               for(let i=0;i<bbLookup.length; i++){
-               
                 if(req.query.layer == bbLookup[i]["layer"] && lodcheck == bbLookup[i]["lod"])
                 {
                   resultArray.push({"url":bbLookup[i].url,"mime": "3dtile"})
@@ -167,24 +143,17 @@ app.get("/service/v1", function (req, res) {
             client_poly = turf_contain.bboxPolygon(req_box);
             
             const bbox_client_turf =turfProject.toWgs84(client_poly);  //here is the box received from client 
-            //console.log(bbox_client_turf);
-            //console.log(req.query);
-         //   console.log("wgs84",bbox_client_turf.geometry["coordinates"]);
             for (let i = 0; i < bbLookup.length; i++) {
               if(req.query.lod == bbLookup[i].lod){
                     const bbox_scene = JSON.parse("[" + bbLookup[i].boundingbox + "]");
                     const bbox_scene_turf = turf_contain.bboxPolygon(bbox_scene);
-                   // console.log(bbox_scene_turf.geometry["coordinates"]);
-                    
                     const check_intersect = turf_contain.intersect(bbox_scene_turf , bbox_client_turf);
-                  //  console.log(check_intersect,i);
                     if(check_intersect !=undefined){
                         resultArray.push({"url":bbLookup[i].url,"mime": "i3s"});
                     }
             }
           }
            console.log("check done!",resultArray);
-           // console.log(req.url);
             res.send(resultArray);
             res.end;
       }
@@ -230,10 +199,7 @@ app.get("/service/v1", function (req, res) {
     });
   }
 });
-/**
- * Following code will get URL's and parse it.
- * every folder is checked for gz file and json response is given to the user.
- */
+
 app.get("/rest/service*",function(req,res,next){
     var baseURL = req.url.split('/');    
     const n = baseURL.length;  
@@ -271,9 +237,8 @@ app.get("/rest/service*",function(req,res,next){
     },function(error){
         console.log("error!",error);
     })
-    //console.log(names);
     res.end;
-    } //ending of app get call. 
+    } 
 );
 
 app.get("/getLookupfile/",function(req,res){
