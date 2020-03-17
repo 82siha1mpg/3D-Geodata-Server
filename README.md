@@ -3,4 +3,4 @@ This is an implementation of OGC based 3DPS Getscene Request service, which aims
 
 More detailed documentation is being prepared and will be available soon.
 
-Thanks for patience :)
+Thanks :)
