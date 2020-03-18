@@ -13,10 +13,14 @@ There are certain prerequirements that needs to be fulfilled. These are as follo
 To intialize, it is required to follow the following steps: 
 1. Start GeoRocket Server from its installation directory. It will look like this:
 ![Image Georocket Server](https://github.com/82siha1mpg/3D-Geodata-Server/blob/master/Img/georocket.JPG)
-2. Once Primary DB server starts, it is required to start Georocket Synchronization which aims at keeping primary and secondary database synced to each other.   
+2. Once Primary DB server starts, it is required to start Georocket Synchronization which aims at keeping primary and secondary database synced to each other. Following commands shall be executed:
+```
+cd GeoRocket_Synchronization    
+npm install                     // To install dependencies
+node server.js                  // To initialize synchronization pipeline in listening mode.
+```
 
 # Authors
 * Harpreet Singh, harpreet19897079@gmail.com 
 * Prof. Volker Coors, volker.coors@hft-stuttgart.de
 * Mr. Stephan Bludovsky, Stephan.Bludovsky@lgl.bwl.de
-Thanks :)
