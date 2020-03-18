@@ -9,6 +9,10 @@ There are certain prerequirements that needs to be fulfilled. These are as follo
 1. **GeoRocket:** This has been used as Primary database, which holds CityGML files. *Georocket Server* needs to be installed. *Server API* can be downloaded from [here](https://georocket.io/download/)!
 2. **NodeJS:** It is also required to be installed on the machine, and can be obtained from [here](https://nodejs.org/en/)!
 
+# Project Setup
+To intialize, it is required to follow the following steps: 
+1. Start GeoRocket Server from its installation directory. It will look like this:
+
 # Authors
 * Harpreet Singh, harpreet19897079@gmail.com 
 * Prof. Volker Coors, volker.coors@hft-stuttgart.de
