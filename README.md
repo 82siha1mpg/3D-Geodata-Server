@@ -19,6 +19,13 @@ cd GeoRocket_Synchronization
 npm install                     // To install dependencies
 node server.js                  // To initialize synchronization pipeline in listening mode.
 ```
+3. After initializing Synchronization pipeline, 3D geodata server must be started. To run this server following commands needs to be executed in the windows commands prompt:
+```
+cd 3DPS Geoserver    
+npm install                     // To install dependencies
+node server.js                  // To initialize synchronization pipeline in listening mode.
+```
+Now, implementation is ready to be used :)
 
 # Authors
 * Harpreet Singh, harpreet19897079@gmail.com 
