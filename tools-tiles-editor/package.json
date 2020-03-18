@@ -65,6 +65,7 @@
     "jsDoc": "gulp jsDoc",
     "cloc": "gulp cloc"
   },
+  
   "bin": {
     "3d-tiles-tools": "./bin/3d-tiles-tools.js"
   }
