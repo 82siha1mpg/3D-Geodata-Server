@@ -26,6 +26,14 @@ npm install                     // To install dependencies
 node server.js                  // To initialize synchronization pipeline in listening mode.
 ```
 Now, implementation is ready to be used :)
+# Test Run
+Once the system is up and ready to be used, user can start bringing in the data. As mentioned above, GeoRocket is used as Primary DB in this implementation, a http interface is used to manage it. It can execute three different commands: _*Import, Add, Delete*_.
+* _Import_: Import new cityGml file using this button. It will first bring in the cityGml into the GeoRocket DB and after that it creates 3d models for this new data.
+* _Add_: If there is a new building that needs to be added, can be imported using this option. This building will be imported into GeoRocket DB. After this, it will automatically add this new building into 3D Tiles and Indexed 3D Scene Layers.
+* _Delete_: Using this option, any errorneous building can be deleted. It will first delete data from GeoRocket, and then it will delete building from existing 3D Tile and Indexed 3D Scene. 
+
+# 3D Visualization
+Once 3D models are created and published as assets, they are ready to be visualized. Two web applications are created using Cesium JS API and Esri JS API. These applications allow users to draw a bounding box on the virtual digital globes and send request to the Server. 3D Data can then be visualized on Cesium and Esri globes.   
 
 # Authors
 * Harpreet Singh, harpreet19897079@gmail.com 
