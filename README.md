@@ -8,6 +8,7 @@ The 3D Portrayal Service Standard is a geospatial 3D content delivery implementa
 There are certain prerequirements that needs to be fulfilled. These are as follows: 
 1. **GeoRocket:** This has been used as Primary database, which holds CityGML files. *Georocket Server* needs to be installed. *Server API* can be downloaded from [here](https://georocket.io/download/)!
 2. **NodeJS:** It is also required to be installed on the machine, and can be obtained from [here](https://nodejs.org/en/)!
+3. **FME:** It is a product of Safe Software Inc, which is used to translate data formats. It is required to be installed on the system in order to make this repo work, as it is used for the translation of CityGML to 3D Tiles/Indexed 3D Scene layers.
 
 # Setup
 To intialize, it is required to follow the following steps: 
